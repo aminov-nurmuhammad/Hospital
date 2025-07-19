@@ -71,12 +71,12 @@ public class Runner implements CommandLineRunner {
                 .build());
 
         User adminUser = userRepository.save(User.builder()
-                .firstName("Salmon")
-                .lastName("Abdusattorov")
-                .phone("+998912366533")
-                .password(passwordEncoder.encode("123"))
-                .birthDate(LocalDate.of(1985, 3, 20))
-                .address("123 Chilanzar, Tashkent, Uzbekistan")
+                .firstName("Kamola")
+                .lastName("Rustamova")
+                .phone("+998901234001")
+                .password(passwordEncoder.encode("admin"))
+                .birthDate(LocalDate.of(1984, 4, 12))
+                .address("23 Afrosiyob Street, Tashkent, Uzbekistan")
                 .roles(List.of(adminRole))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -89,12 +89,12 @@ public class Runner implements CommandLineRunner {
                 .build());
 
         User superAdminUser = userRepository.save(User.builder()
-                .firstName("Super")
-                .lastName("Adminov")
-                .phone("+998901234567")
-                .password(passwordEncoder.encode("123"))
-                .birthDate(LocalDate.of(1978, 7, 15))
-                .address("456 Yunusabad, Tashkent, Uzbekistan")
+                .firstName("Javohir")
+                .lastName("Nasriddinov")
+                .phone("+998901234002")
+                .password(passwordEncoder.encode("superadmin"))
+                .birthDate(LocalDate.of(1976, 6, 5))
+                .address("78 Buyuk Ipak Yo‘li, Tashkent, Uzbekistan")
                 .roles(List.of(superAdminRole))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -107,23 +107,24 @@ public class Runner implements CommandLineRunner {
                 .build());
 
         User doctorUser1 = userRepository.save(User.builder()
-                .firstName("Hikmat")
-                .lastName("Stamatolog")
-                .phone("+998911234567")
-                .password(passwordEncoder.encode("d"))
-                .birthDate(LocalDate.of(1980, 5, 10))
-                .address("789 Mirzo Ulugbek, Tashkent, Uzbekistan")
+                .firstName("Iskandar")
+                .lastName("Khodjaev")
+                .phone("+998901234003")
+                .password(passwordEncoder.encode("doctor"))
+                .birthDate(LocalDate.of(1982, 3, 14))
+                .address("145 Shaykhontohur District, Tashkent")
                 .roles(List.of(doctorRole))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build());
+
         User doctorUser2 = userRepository.save(User.builder()
-                .firstName("Olga")
-                .lastName("Ivanova")
-                .phone("+998912345678")
-                .password(passwordEncoder.encode("dd"))
-                .birthDate(LocalDate.of(1975, 11, 25))
-                .address("101 Sergeli, Tashkent, Uzbekistan")
+                .firstName("Dilorom")
+                .lastName("Saidova")
+                .phone("+998901234004")
+                .password(passwordEncoder.encode("doctor2"))
+                .birthDate(LocalDate.of(1979, 12, 22))
+                .address("56 Yakkasaray District, Tashkent")
                 .roles(List.of(doctorRole))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -135,6 +136,7 @@ public class Runner implements CommandLineRunner {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build());
+
         Doctor doctor2 = doctorRepository.save(Doctor.builder()
                 .user(doctorUser2)
                 .speciality(cardiology)
@@ -143,23 +145,24 @@ public class Runner implements CommandLineRunner {
                 .build());
 
         User patientUser1 = userRepository.save(User.builder()
-                .firstName("Eshmat")
-                .lastName("Toshmatov")
-                .phone("+998335750609")
-                .password(passwordEncoder.encode("p"))
-                .birthDate(LocalDate.of(1990, 8, 30))
-                .address("202 Shaykhantahur, Tashkent, Uzbekistan")
+                .firstName("Sherzod")
+                .lastName("Mahkamov")
+                .phone("+998901234005")
+                .password(passwordEncoder.encode("patient"))
+                .birthDate(LocalDate.of(1992, 9, 17))
+                .address("33 Olmazor District, Tashkent")
                 .roles(List.of(patientRole))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build());
+
         User patientUser2 = userRepository.save(User.builder()
-                .firstName("Ali")
-                .lastName("Valiyev")
-                .phone("+998335750610")
-                .password(passwordEncoder.encode("pp"))
-                .birthDate(LocalDate.of(1995, 2, 14))
-                .address("303 Chilanzar, Tashkent, Uzbekistan")
+                .firstName("Nigora")
+                .lastName("Rashidova")
+                .phone("+998901234006")
+                .password(passwordEncoder.encode("patient2"))
+                .birthDate(LocalDate.of(1996, 1, 8))
+                .address("44 Chilanzar District, Tashkent")
                 .roles(List.of(patientRole))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -170,11 +173,13 @@ public class Runner implements CommandLineRunner {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build());
+
         Patient patient2 = patientRepository.save(Patient.builder()
                 .user(patientUser2)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build());
+
 
         /*admissionRepository.saveAll(List.of(
                 Admission.builder()
