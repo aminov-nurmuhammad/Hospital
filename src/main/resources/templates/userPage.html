@@ -267,7 +267,7 @@
 </head>
 <body>
 <main class="container">
-    <!-- Patient Details Section -->
+
     <section class="patient-details">
         <h5>Patient Details</h5>
         <p><strong>Name:</strong> <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span></p>
@@ -335,7 +335,7 @@
         </table>
     </section>
 
-    <!-- Procedures Modals -->
+
     <th:block th:each="admission : ${admissions}">
         <div class="modal fade"
              th:id="'procedureModal-' + ${admission.id}"
@@ -375,7 +375,7 @@
         </div>
     </th:block>
 
-    <!-- Medicines Modals -->
+
     <th:block th:each="admission : ${admissions}">
         <div class="modal fade"
              th:id="'medicineModal-' + ${admission.id}"
@@ -416,15 +416,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Get all procedure and medicine buttons
+
         const buttons = document.querySelectorAll('.btn-procedure');
 
         buttons.forEach(button => {
-            // Remove any existing listeners to prevent duplicates
+
             const clonedButton = button.cloneNode(true);
             button.parentNode.replaceChild(clonedButton, button);
 
-            // Get the target modal ID
             const modalId = clonedButton.getAttribute('data-bs-target');
             const modalElement = document.querySelector(modalId);
             const modal = new bootstrap.Modal(modalElement, {
@@ -432,7 +431,6 @@
                 backdrop: 'static' // Prevents closing on backdrop click for testing
             });
 
-            // Debounce variable to prevent rapid triggering
             let isOpening = false;
 
             clonedButton.addEventListener('click', function (e) {
@@ -443,14 +441,12 @@
                     isOpening = true;
                     modal.show();
 
-                    // Reset debounce after a short delay
                     setTimeout(() => {
                         isOpening = false;
                     }, 500); // 500ms debounce
                 }
             });
 
-            // Ensure modal hides cleanly
             modalElement.addEventListener('hidden.bs.modal', function () {
                 isOpening = false;
             });

@@ -38,7 +38,6 @@ public class Runner implements CommandLineRunner {
             return;
         }
 
-        // Create Roles
         Role adminRole = roleRepository.save(Role.builder()
                 .name("ROLE_ADMIN")
                 .createdAt(LocalDateTime.now())
@@ -60,7 +59,6 @@ public class Runner implements CommandLineRunner {
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-        // Create Specialities
         Speciality stomatology = specialityRepository.save(Speciality.builder()
                 .name("Stomatology")
                 .createdAt(LocalDateTime.now())
@@ -72,7 +70,6 @@ public class Runner implements CommandLineRunner {
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-        // Create Admin User
         User adminUser = userRepository.save(User.builder()
                 .firstName("Salmon")
                 .lastName("Abdusattorov")
@@ -91,7 +88,6 @@ public class Runner implements CommandLineRunner {
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-        // Create Super Admin User
         User superAdminUser = userRepository.save(User.builder()
                 .firstName("Super")
                 .lastName("Adminov")
@@ -110,7 +106,6 @@ public class Runner implements CommandLineRunner {
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-        // Create Doctor Users
         User doctorUser1 = userRepository.save(User.builder()
                 .firstName("Hikmat")
                 .lastName("Stamatolog")
@@ -147,7 +142,6 @@ public class Runner implements CommandLineRunner {
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-        // Create Patient Users
         User patientUser1 = userRepository.save(User.builder()
                 .firstName("Eshmat")
                 .lastName("Toshmatov")
@@ -182,7 +176,6 @@ public class Runner implements CommandLineRunner {
                 .updatedAt(LocalDateTime.now())
                 .build());
 
-        // Create Admissions with Procedures and Prescriptions
         /*admissionRepository.saveAll(List.of(
                 Admission.builder()
                         .admissionDateTime(LocalDateTime.now().minusDays(2))

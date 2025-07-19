@@ -4,13 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reception Dashboard</title>
-    <!-- Bootstrap 5.3.2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- Font Awesome 6.5.1 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Google Fonts: Roboto -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -242,7 +238,6 @@
 <body>
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <!-- Sidebar -->
         <nav class="col-12 col-md-3 sidebar p-4">
             <div class="brand mb-4">
                 <i class="fa-solid fa-receipt" style="font-size: 1.5em; margin-left: 20px"></i>
@@ -260,7 +255,6 @@
             </button>
         </nav>
 
-        <!-- Main Content -->
         <main class="col main-content p-4">
             <div class="d-flex justify-content-center align-items-center mb-4 position-relative">
                 <div class="section-header mx-auto mt-3">
@@ -274,7 +268,6 @@
 
             </div>
 
-            <!-- Patient Details Section -->
             <div th:if="${selectedPatient != null}" class="card mb-4">
                 <div class="card-body">
                     <h4 class="card-title mb-4"><i class="fa-solid fa-user"></i> Patient Details</h4>
@@ -298,11 +291,9 @@
                 </div>
             </div>
 
-            <!-- Scheduling Section -->
             <div th:if="${selectedPatient != null}" class="card mb-4">
                 <div class="card-body">
                     <div class="section-header mb-3  d-flex justify-content-center"><i class="fa-solid fa-calendar-plus"></i> Schedule Appointment</div>
-                    <!-- Scheduling Error Messages -->
                     <div th:if="${sameDayError}" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <span th:text="${sameDayError}"></span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -335,7 +326,6 @@
                 </div>
             </div>
 
-            <!-- Patient History -->
             <section th:if="${selectedPatient != null}">
                 <div class="section-header mb-2 d-flex justify-content-center"><i class="fa-solid fa-clock-rotate-left"></i> Patient History</div>
                 <div th:if="${admissions.isEmpty()}" class="alert alert-info">No history found.</div>
@@ -363,7 +353,6 @@
                             </span>
                         </div>
 
-                        <!-- Admission Details Modal -->
                         <div class="modal fade" th:id="'admissionModal-' + ${adm.id}" th:attr="aria-labelledby='admissionModalLabel-' + ${adm.id}" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                 <div class="modal-content border-0 shadow-lg rounded-4">
@@ -443,7 +432,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div> <!-- /.row -->
+                                        </div>
                                     </div>
                                     <div class="modal-footer bg-white border-0 rounded-bottom-4">
                                         <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
@@ -455,7 +444,6 @@
                         </div>
 
 
-                        <!-- Cancel Admission Modal -->
                         <div class="modal fade" th:id="'cancelModal-' + ${adm.id}" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -484,13 +472,11 @@
                 </ul>
             </section>
 
-            <!-- No Patient Selected -->
             <div th:if="${selectedPatient == null}" class="alert alert-warning">No patient selected. Please choose one from the list.</div>
         </main>
     </div>
 </div>
 
-<!-- Add Patient Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -536,9 +522,7 @@
     </div>
 </div>
 
-<!-- Scripts -->
 <script>
-    // Patient search filter
     function filterPatients() {
         const filter = document.getElementById('searchPatient').value.toLowerCase();
         document.querySelectorAll('#patientList li').forEach(li => {
@@ -547,7 +531,6 @@
             li.style.display = (name.includes(filter) || phone.includes(filter)) ? '' : 'none';
         });
     }
-    // Phone validation for Add Patient modal
     function validatePhone() {
         const phoneInput = document.getElementById('phone');
         const error = document.getElementById('phoneError');
@@ -560,7 +543,6 @@
         phoneInput.classList.remove('is-invalid');
         return true;
     }
-    // Enable Bootstrap tooltips
     document.addEventListener('DOMContentLoaded', function () {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.forEach(function (tooltipTriggerEl) {

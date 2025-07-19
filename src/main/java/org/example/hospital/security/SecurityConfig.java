@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/auth/**")) // Optional: disable CSRF for /auth/*
+                        .ignoringRequestMatchers("/auth/**"))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/css/**", "/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -44,7 +44,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(exception -> exception
-                        // This ensures redirection to login page instead of 403
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/auth/login"))
                 )
                 .userDetailsService(customUserDetailsService);

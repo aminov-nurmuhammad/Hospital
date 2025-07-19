@@ -101,7 +101,7 @@ public class DoctorController {
                 return "redirect:/doctor";
             }
         } else {
-            model.addAttribute("admissions", List.of()); // Empty list to avoid null issues
+            model.addAttribute("admissions", List.of());
         }
 
         return "doctor";

@@ -37,7 +37,6 @@ public class PatientController {
 
         List<Admission> admissions = admissionRepository.findAdmissionByPatientId(patient.getId());
 
-        // Compute waitStatus for each admission
         Map<UUID, String> waitStatuses = new HashMap<>();
         for (Admission admission : admissions) {
             String waitStatus;

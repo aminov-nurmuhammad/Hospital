@@ -59,7 +59,6 @@ public class AdminController {
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found or not a valid patient"));
         List<Admission> admissions = admissionRepository.findAdmissionByPatientId(id);
 
-        // Check for late admissions
         LocalDateTime now = LocalDateTime.now();
         for (Admission admission : admissions) {
             if (admission.getStatus() == AdmissionStatus.SCHEDULED &&
@@ -130,7 +129,6 @@ public class AdminController {
         LocalDateTime dateTime = LocalDateTime.parse(admissionReq.admissionDateTime());
         LocalDate requestedDate = dateTime.toLocalDate();
 
-        // Check for active appointments (SCHEDULED, LATE, ARRIVED) on the same day
         List<Admission> sameDayAdmissions = admissionRepository.findAdmissionByPatientId(patientId)
                 .stream()
                 .filter(adm -> adm.getAdmissionDateTime().toLocalDate().equals(requestedDate))
@@ -144,7 +142,6 @@ public class AdminController {
             return "redirect:/admin/patient/" + patientId;
         }
 
-        // Check for overlapping appointments (within 15 minutes)
         List<Admission> existingAdmissions = admissionRepository.findByDoctorIdAndAdmissionDateTimeBetweenAndCancelledFalse(
                 doctorId,
                 dateTime.minusMinutes(15),

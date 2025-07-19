@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Doctor's Dashboard</title>
-    <!-- Bootstrap 5.3.2 CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- Font Awesome 6.5.1 -->
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- Bootstrap Icons -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Google Fonts: Roboto -->
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -292,7 +292,7 @@
 <body>
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <!-- Sidebar -->
+
         <nav class="col-12 col-md-3 sidebar p-4">
             <div class="brand mb-4">
                 <i class="fa-solid fa-stethoscope" style="font-size: 1.5em; margin-left: 25px"></i>
@@ -341,7 +341,7 @@
             </ul>
         </nav>
 
-        <!-- Main Content -->
+
         <main class="col main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="section-header mx-auto mt-3">
@@ -355,13 +355,11 @@
 
             </div>
 
-            <!-- Error Message -->
             <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <span th:text="${error}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
-            <!-- Patient Details Section -->
             <div th:if="${patient != null}" class="card mb-4">
                 <div class="card-body">
                     <h4 class="card-title mb-4"><i class="fa-solid fa-user"></i> Patient Details</h4>
@@ -390,7 +388,7 @@
                 </div>
             </div>
 
-            <!-- Visit Description Section -->
+
             <div th:if="${patient != null}" class="card mb-4">
                 <div class="card-body">
                     <h4 class="card-title mb-4 d-flex justify-content-center"><i class="fa-solid fa-notes-medical"></i> Visit Description</h4>
@@ -414,7 +412,7 @@
                 </div>
             </div>
 
-            <!-- Patient Procedures -->
+
             <div th:if="${patient != null}">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -422,7 +420,7 @@
                             <h2 class="card-title mb-0" th:text="${patient.user.firstName} + ' ' + ${patient.user.lastName}"></h2>
                             <span class="badge bg-primary fs-6 px-3 py-2">Total Procedure Price: <span th:text="${procedurePriceSum} + ' UZS'"></span></span>
                         </div>
-                        <!-- Procedures Table -->
+
                         <h4 class="mb-3"><i class="fa-solid fa-syringe"></i> Procedures</h4>
                         <div class="table-responsive mb-4">
                             <table class="table table-striped align-middle">
@@ -457,7 +455,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Add Procedure Form -->
+
                         <div th:if="${!readOnly}">
                             <h4 class="mb-3"><i class="fa-solid fa-plus"></i> Add New Procedure</h4>
                             <form th:action="@{/doctor/patient/addProcedure}" method="post" onsubmit="return validateProcedureForm()" class="row g-3 add-form-row">
@@ -491,7 +489,7 @@
 
                             </form>
                         </div>
-                        <!-- Prescriptions Table -->
+
                         <h4 class="mt-5 mb-3"><i class="fa-solid fa-prescription-bottle-medical"></i> Prescriptions</h4>
                         <div class="table-responsive mb-4">
                             <table class="table table-striped align-middle">
@@ -512,7 +510,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Add Prescription Form -->
+
                         <div th:if="${!readOnly}">
                             <h4 class="mb-3"><i class="fa-solid fa-plus"></i> Add New Prescription</h4>
                             <form th:action="@{/doctor/patient/addPrescription}" method="post" onsubmit="return validatePrescriptionForm()" class="row g-3 add-form-row">
@@ -533,14 +531,14 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- Set Total Price Form -->
+
                         <h4 class="mt-5 mb-3"><i class="fa-solid fa-money-bill-wave"></i> Admission Price</h4>
                         <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
                             <p class="mb-0"><strong>Current Total Price (Procedures + Doctor's Fee):</strong> <span th:text="${totalPrice} + ' UZS'"></span></p>
                         </div>
                         <div th:if="${!readOnly}">
                             <div class="row g-3 align-items-end">
-                                <!-- Doctor's Fee Input + Set Button -->
+
                                 <div class="col-md-6">
                                     <form th:action="@{/doctor/patient/setTotalPrice}" method="post" onsubmit="return validatePriceForm()">
                                         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -555,7 +553,7 @@
                                     </form>
                                 </div>
 
-                                <!-- Complete Admission Button (tight) -->
+
                                 <div class="col-md">
                                     <form th:action="@{/doctor/patient/end}" method="post">
                                         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -570,14 +568,14 @@
                     </div>
                 </div>
             </div>
-            <!-- No Patient Selected -->
+
             <div th:if="${patient == null}" class="alert alert-warning">
                 Select a patient from the list to view and manage their procedures.
             </div>
         </main>
     </div>
 </div>
-<!-- Medical History Modal -->
+
 <div class="modal fade" id="medicalHistoryModal" tabindex="-1" aria-labelledby="medicalHistoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -662,9 +660,9 @@
         </div>
     </div>
 </div>
-<!-- Scripts -->
+
 <script>
-    // Patient search filter
+
     function filterPatients() {
         const filter = document.getElementById('searchPatient').value.toLowerCase();
         document.querySelectorAll('#patientList li').forEach(li => {
@@ -672,11 +670,11 @@
             li.style.display = name.includes(filter) ? '' : 'none';
         });
     }
-    // Dark mode toggle
+
     document.getElementById('toggleDarkMode').addEventListener('click', function() {
         document.body.classList.toggle('dark-mode');
     });
-    // Validation scripts (same as before)
+
     function validateProcedureForm() {
         let isValid = true;
         const title = document.getElementById('procedureTitle');
