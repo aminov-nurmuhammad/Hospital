@@ -21,7 +21,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("@RequestMapping(\"/api/admin\")\n/patient")
-public class PatientController {
+public class PatientApiController {
 
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;

@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/home")
 @RequiredArgsConstructor
-public class HomeController {
+public class HomeApiController {
 
     @GetMapping("/")
     public Map<String, String> home() {

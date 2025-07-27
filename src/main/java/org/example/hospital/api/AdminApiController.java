@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
-public class AdminController {
+public class AdminApiController {
 
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
