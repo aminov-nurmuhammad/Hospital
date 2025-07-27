@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/super")
+@RequestMapping("/api/super")
 public class SuperAdminController {
 
     private final DoctorRepository doctorRepository;

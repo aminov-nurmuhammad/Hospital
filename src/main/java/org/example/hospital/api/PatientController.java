@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/patient")
+@RequestMapping("@RequestMapping(\"/api/admin\")\n/patient")
 public class PatientController {
 
     private final PatientRepository patientRepository;

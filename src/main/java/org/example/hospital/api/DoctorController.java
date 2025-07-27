@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/doctor")
+@RequestMapping("/api/doctor")
 public class DoctorController {
 
     private final DoctorRepository doctorRepository;
