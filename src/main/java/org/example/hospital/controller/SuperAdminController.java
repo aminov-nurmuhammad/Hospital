@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/super")
 public class SuperAdminController {

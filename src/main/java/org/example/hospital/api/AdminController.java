@@ -1,4 +1,4 @@
-package org.example.hospital.controller;
+package org.example.hospital.api;
 
 import lombok.RequiredArgsConstructor;
 import org.example.hospital.dto.AdmissionReq;
@@ -7,21 +7,18 @@ import org.example.hospital.entity.Admission;
 import org.example.hospital.entity.enums.AdmissionStatus;
 import org.example.hospital.entity.users.*;
 import org.example.hospital.repo.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
@@ -35,24 +32,21 @@ public class AdminController {
     private final AdministratorRepository administratorRepository;
 
     @GetMapping("/page")
-    public String adminPage(Model model) {
+    public Map<String, Object> adminPage() {
         List<Doctor> doctors = doctorRepository.findAll();
         List<Patient> patients = patientRepository.findAll().stream()
                 .filter(patient -> patient.getUser().getRoles().stream()
                         .anyMatch(role -> "ROLE_PATIENT".equals(role.getName())))
                 .collect(Collectors.toList());
-        model.addAttribute("doctors", doctors);
-        model.addAttribute("patients", patients);
-        return "adminPage";
+        Map<String, Object> response = new HashMap<>();
+        response.put("doctors", doctors);
+        response.put("patients", patients);
+        response.put("message", "Admin page data retrieved successfully.");
+        return response;
     }
 
     @GetMapping("/patient/{id}")
-    public String getPatientHistory(@PathVariable UUID id, Model model) {
-        List<Doctor> doctors = doctorRepository.findAll();
-        List<Patient> patients = patientRepository.findAll().stream()
-                .filter(patient -> patient.getUser().getRoles().stream()
-                        .anyMatch(role -> "ROLE_PATIENT".equals(role.getName())))
-                .collect(Collectors.toList());
+    public Map<String, Object> getPatientHistory(@PathVariable UUID id) {
         Patient patient = patientRepository.findById(id)
                 .filter(p -> p.getUser().getRoles().stream()
                         .anyMatch(role -> "ROLE_PATIENT".equals(role.getName())))
@@ -68,15 +62,15 @@ public class AdminController {
             }
         }
 
-        model.addAttribute("doctors", doctors);
-        model.addAttribute("patients", patients);
-        model.addAttribute("selectedPatient", patient);
-        model.addAttribute("admissions", admissions);
-        return "adminPage";
+        Map<String, Object> response = new HashMap<>();
+        response.put("selectedPatient", patient);
+        response.put("admissions", admissions);
+        response.put("message", "Patient history retrieved successfully.");
+        return response;
     }
 
     @PostMapping("/addUser")
-    public String addUser(@ModelAttribute UserReq userReq) {
+    public ResponseEntity<Map<String, Object>> addUser(@RequestBody UserReq userReq) {
         Role role = roleRepository.findByName("ROLE_PATIENT")
                 .orElseGet(() -> roleRepository.save(Role.builder()
                         .name("ROLE_PATIENT")
@@ -106,15 +100,17 @@ public class AdminController {
 
         patientRepository.save(patient);
 
-        return "redirect:/admin/page";
+        Map<String, Object> response = new HashMap<>();
+        response.put("patient", patient);
+        response.put("message", "User added successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/schedule")
-    public String schedule(@ModelAttribute AdmissionReq admissionReq,
-                           @RequestParam UUID patientId,
-                           @RequestParam UUID doctorId,
-                           Authentication authentication,
-                           RedirectAttributes redirectAttributes) {
+    public ResponseEntity<Map<String, Object>> schedule(@RequestBody AdmissionReq admissionReq,
+                                                        @RequestParam UUID patientId,
+                                                        @RequestParam UUID doctorId,
+                                                        Authentication authentication) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
         Patient patient = patientRepository.findById(patientId)
@@ -137,9 +133,9 @@ public class AdminController {
                         adm.getStatus() == AdmissionStatus.ARRIVED)
                 .toList();
         if (!sameDayAdmissions.isEmpty()) {
-            redirectAttributes.addFlashAttribute("sameDayError",
-                    "Patient already has an active appointment today. Please complete or cancel it before scheduling another.");
-            return "redirect:/admin/patient/" + patientId;
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Patient already has an active appointment today. Please complete or cancel it before scheduling another.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
         List<Admission> existingAdmissions = admissionRepository.findByDoctorIdAndAdmissionDateTimeBetweenAndCancelledFalse(
@@ -151,9 +147,9 @@ public class AdminController {
             String conflictingTimes = existingAdmissions.stream()
                     .map(adm -> adm.getAdmissionDateTime().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
                     .collect(Collectors.joining(", "));
-            redirectAttributes.addFlashAttribute("scheduleError",
-                    "Doctor is already scheduled at " + conflictingTimes + ". Please choose a different time.");
-            return "redirect:/admin/patient/" + patientId;
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Doctor is already scheduled at " + conflictingTimes + ". Please choose a different time.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
         Admission admission = Admission.builder()
@@ -169,27 +165,41 @@ public class AdminController {
                 .updatedAt(LocalDateTime.now())
                 .build();
         admissionRepository.save(admission);
-        return "redirect:/admin/patient/" + patientId;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("admission", admission);
+        response.put("message", "Admission scheduled successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/acceptAdmission")
-    public String acceptAdmission(@RequestParam UUID admissionId) {
+    public ResponseEntity<Map<String, Object>> acceptAdmission(@RequestParam UUID admissionId) {
         Admission admission = admissionRepository.findById(admissionId)
                 .orElseThrow(() -> new IllegalArgumentException("Admission not found"));
         if (admission.getStatus() == AdmissionStatus.SCHEDULED || admission.getStatus() == AdmissionStatus.LATE) {
             admission.setStatus(AdmissionStatus.ARRIVED);
             admission.setArrivedDate(LocalDateTime.now());
             admissionRepository.save(admission);
+            Map<String, Object> response = new HashMap<>();
+            response.put("admission", admission);
+            response.put("message", "Admission accepted successfully.");
+            return ResponseEntity.ok(response);
+        } else {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Admission cannot be accepted in its current state.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-        return "redirect:/admin/patient/" + admission.getPatient().getId();
     }
 
     @PostMapping("/cancelAdmission")
-    public String cancelAdmission(@RequestParam UUID admissionId, @RequestParam String reason) {
+    public ResponseEntity<Map<String, Object>> cancelAdmission(@RequestParam UUID admissionId, @RequestParam String reason) {
         Admission admission = admissionRepository.findById(admissionId)
                 .orElseThrow(() -> new IllegalArgumentException("Admission not found"));
         admission.cancel(reason);
         admissionRepository.save(admission);
-        return "redirect:/admin/patient/" + admission.getPatient().getId();
+        Map<String, Object> response = new HashMap<>();
+        response.put("admission", admission);
+        response.put("message", "Admission cancelled successfully.");
+        return ResponseEntity.ok(response);
     }
 }

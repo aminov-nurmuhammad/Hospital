@@ -1,4 +1,4 @@
-package org.example.hospital.controller;
+package org.example.hospital.api;
 
 import lombok.RequiredArgsConstructor;
 import org.example.hospital.entity.Admission;
@@ -8,20 +8,17 @@ import org.example.hospital.repo.AdmissionRepository;
 import org.example.hospital.repo.PatientRepository;
 import org.example.hospital.repo.UserRepository;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/patient")
 public class PatientController {
@@ -31,7 +28,7 @@ public class PatientController {
     private final AdmissionRepository admissionRepository;
 
     @GetMapping
-    public String patientPage(Model model, Authentication authentication) {
+    public Map<String, Object> patientPage(Authentication authentication) {
         User user = userRepository.findUserByPhone(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         Patient patient = patientRepository.findPatientByUserId(user.getId());
@@ -50,10 +47,12 @@ public class PatientController {
             waitStatuses.put(admission.getId(), waitStatus);
         }
 
-        model.addAttribute("currentPatient", patient);
-        model.addAttribute("admissions", admissions);
-        model.addAttribute("user", user);
-        model.addAttribute("waitStatuses", waitStatuses);
-        return "userPage";
+        Map<String, Object> response = new HashMap<>();
+        response.put("currentPatient", patient);
+        response.put("admissions", admissions);
+        response.put("user", user);
+        response.put("waitStatuses", waitStatuses);
+        response.put("message", "Patient data retrieved successfully.");
+        return response;
     }
 }
